@@ -1,0 +1,20 @@
+BoxLayout
+    padding: sp(20)
+    orientation: 'vertical'
+
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: sp(20)
+
+        Label:
+            font_size: sp(40)
+            text: "Maelstrom Kivy Questionnaire"
+            text_size: self.width, None
+            size_hint_y: None
+
+        Label:
+            font_size: '18sp'
+            text: "This is a simple questionnaire demo with three test pages and a conclusion page.\n\nAll pages have a question and three multiple choice answers. The first question is a text, the second an audio and the last question is a video. The last page shows the score and a farewell message!\n\nPress start to begin..."
+            text_size: self.size
+            valign: 'top'
+

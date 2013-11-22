@@ -1,0 +1,39 @@
+BoxLayout
+    padding: sp(20)
+    orientation: 'vertical'
+
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: sp(20)
+
+        Label:
+            font_size: sp(20)
+            text: "Question 1) Aren't you cute?"
+            text_size: self.width, None
+            size_hint_y: None
+
+        StackLayout:
+            orientation: 'lr-tb'
+
+            BoxLayout:
+                orientation: 'horizontal'
+                CheckBox:
+                    border: True
+
+                    group: "money"
+                    active: True
+                    size_hint_x: None
+                Label:
+                    text: "A radio in a group"
+                    text_size: self.width, None
+                    halign: 'left'
+
+            BoxLayout:
+                orientation: 'horizontal'
+                CheckBox:
+                    group: "money"
+                    size_hint_x: None
+                Label:
+                    text: "Another radio in same group"
+                    text_size: self.width, None
+                    halign: 'left'

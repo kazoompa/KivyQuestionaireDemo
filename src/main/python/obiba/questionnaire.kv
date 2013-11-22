@@ -1,0 +1,46 @@
+#:kivy 1.7.2
+
+
+<Container>:
+    canvas.before:
+		Color:
+			rgb: .2, .4, .4
+		Rectangle:
+			pos: self.pos
+			size: self.size
+
+<Questionnaire>:
+    screens: screens
+    footer: footer
+
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        ScreenManager:
+            id: screens
+            Screen:
+                name: "intro"
+                Intro:
+            Screen:
+                name: "q001"
+                Question001:
+
+        StackLayout:
+            id: footer
+            orientation: 'rl-tb'
+            size_hint: 1, None
+            padding: sp(10)
+            height: root.height * .1
+
+            canvas:
+                Color:
+                    rgb: 0.2, 0.2, 0.2
+                Rectangle:
+                    pos: self.pos
+                    size: self.width, self.height
+            Button:
+                id: start_button
+                text: "Start"
+                size_hint: None, 1
+                on_press: root.nextScreen()
