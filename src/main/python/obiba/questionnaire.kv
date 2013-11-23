@@ -4,7 +4,7 @@
 <Container>:
     canvas.before:
 		Color:
-			rgb: .2, .4, .4
+			rgb: root.hexToPercent("3c4a43")
 		Rectangle:
 			pos: self.pos
 			size: self.size
@@ -25,6 +25,12 @@
             Screen:
                 name: "q001"
                 Question001:
+            Screen:
+                name: "q002"
+                Question002:
+            Screen:
+                name: "q003"
+                Question003:
 
         StackLayout:
             id: footer
@@ -35,11 +41,12 @@
 
             canvas:
                 Color:
-                    rgb: 0.2, 0.2, 0.2
+                    rgb: root.hexToPercent("2e3934")
                 Rectangle:
                     pos: self.pos
                     size: self.width, self.height
             Button:
+                background_color: root.hexToPercent("29332e")
                 id: start_button
                 text: "Start"
                 size_hint: None, 1

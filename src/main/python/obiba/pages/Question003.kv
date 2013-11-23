@@ -6,10 +6,12 @@ BoxLayout
         orientation: 'vertical'
 
         Label:
+            markup: True
             font_size: sp(20)
-            text: "1) Have you ever made out in a movie theater?"
+            text: "2) Have a look at this [ref=video][b][i]video[/i][/b][/ref] and choose one of the possible answers below?"
             text_size: self.width, None
             size_hint_y: None
+            on_ref_press: root.parent.play_video("holy_glou.avi")
 
         AnchorLayout:
             anchor_x: 'left'
@@ -27,20 +29,20 @@ BoxLayout
                     size_hint_x: .1
                 Label:
                     id: lbl
-                    text: 'No, oh God, oh no!'
+                    text: 'Jesus wanna have some glou.'
                     font_size: sp(18)
                     text_size: self.width, None
                 CheckBox:
                     group: "a"
                     size_hint_x: .1
                 Label:
-                    text: "Yeah, it was with my wife's sister"
+                    text: "Holy beer."
                     font_size: sp(18)
                     text_size: self.width, None
                 CheckBox:
                     group: "a"
                     size_hint_x: .1
                 Label:
-                    text: "I don't remember, I was drunk at the time!"
+                    text: "Stupid fridge magnets!"
                     font_size: sp(18)
                     text_size: self.width, None
