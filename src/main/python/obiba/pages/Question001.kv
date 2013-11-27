@@ -6,6 +6,7 @@ BoxLayout
         orientation: 'vertical'
 
         Label:
+            id: question
             font_size: sp(20)
             text: "1) Have you ever made out in a movie theater?"
             text_size: self.width, None
@@ -16,31 +17,35 @@ BoxLayout
             anchor_y: 'top'
 
             GridLayout:
-                lbl: lbl
+                lbl1: lbl1
                 cols: 2
-                row_default_height: lbl.texture_size[1] * 3
+                row_default_height: lbl1.texture_size[1] * 3
                 row_force_default: True
                 size_hint: 1, .3
                 CheckBox:
                     group: "a"
-                    active: True
                     size_hint_x: .1
+                    on_active: root.parent.set_active(question, lbl1.text)
                 Label:
-                    id: lbl
+                    id: lbl1
                     text: 'No, oh God, oh no!'
                     font_size: sp(18)
                     text_size: self.width, None
                 CheckBox:
                     group: "a"
                     size_hint_x: .1
+                    on_active: root.parent.set_active(question, lbl2.text)
                 Label:
+                    id: lbl2
                     text: "Yeah, it was with my wife's sister"
                     font_size: sp(18)
                     text_size: self.width, None
                 CheckBox:
                     group: "a"
                     size_hint_x: .1
+                    on_active: root.parent.set_active(question, lbl3.text)
                 Label:
+                    id: lbl3
                     text: "I don't remember, I was drunk at the time!"
                     font_size: sp(18)
                     text_size: self.width, None

@@ -6,6 +6,7 @@ BoxLayout
         orientation: 'vertical'
 
         Label:
+            id: question
             markup: True
             font_size: sp(20)
             text: "2) Have a look at this [ref=video][b][i]video[/i][/b][/ref] and choose one of the possible answers below?"
@@ -18,31 +19,35 @@ BoxLayout
             anchor_y: 'top'
 
             GridLayout:
-                lbl: lbl
+                lbl1: lbl1
                 cols: 2
-                row_default_height: lbl.texture_size[1] * 3
+                row_default_height: lbl1.texture_size[1] * 3
                 row_force_default: True
                 size_hint: 1, .3
                 CheckBox:
                     group: "a"
-                    active: True
                     size_hint_x: .1
+                    on_active: root.parent.set_active(question, lbl1.text)
                 Label:
-                    id: lbl
+                    id: lbl1
                     text: 'Jesus wanna have some glou.'
                     font_size: sp(18)
                     text_size: self.width, None
                 CheckBox:
                     group: "a"
                     size_hint_x: .1
+                    on_active: root.parent.set_active(question, lbl2.text)
                 Label:
+                    id: lbl2
                     text: "Holy beer."
                     font_size: sp(18)
                     text_size: self.width, None
                 CheckBox:
                     group: "a"
                     size_hint_x: .1
+                    on_active: root.parent.set_active(question, lbl3.text)
                 Label:
+                    id: lbl3
                     text: "Stupid fridge magnets!"
                     font_size: sp(18)
                     text_size: self.width, None

@@ -1,0 +1,22 @@
+BoxLayout
+    result_label: result_label
+    padding: sp(20)
+    orientation: 'vertical'
+
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: sp(20)
+
+        Label:
+            font_size: sp(22)
+            text: "Hey, you did it. You answered all the questions and here are the results:"
+            text_size: self.width, None
+            size_hint_y: None
+
+        Label:
+            id: result_label
+            font_size: sp(18)
+            text_size: self.size
+            valign: 'top'
+
+

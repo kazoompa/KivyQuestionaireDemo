@@ -6,43 +6,48 @@ BoxLayout
         orientation: 'vertical'
 
         Label:
+            id: question
             markup: True
             font_size: sp(20)
             text: "2) Listen to this [ref=audio][b][i]sound[/i][/b][/ref] and choose one of the possible answers below?"
             text_size: self.width, None
             size_hint_y: None
-            on_ref_press: root.parent.play_sound("goat.wav")
+            on_ref_press: root.parent.play_sound("12908_sweet_trip_mm_clap_hi.wav")
 
         AnchorLayout:
             anchor_x: 'left'
             anchor_y: 'top'
 
             GridLayout:
-                lbl: lbl
+                lbl1: lbl1
                 cols: 2
-                row_default_height: lbl.texture_size[1] * 3
+                row_default_height: lbl1.texture_size[1] * 3
                 row_force_default: True
                 size_hint: 1, .3
                 CheckBox:
                     group: "a"
-                    active: True
                     size_hint_x: .1
+                    on_active: root.parent.set_active(question, lbl1.text)
                 Label:
-                    id: lbl
+                    id: lbl1
                     text: 'Sound of an elephant being molested!'
                     font_size: sp(18)
                     text_size: self.width, None
                 CheckBox:
                     group: "a"
                     size_hint_x: .1
+                    on_active: root.parent.set_active(question, lbl2.text)
                 Label:
+                    id: lbl2
                     text: "A crazy goat."
                     font_size: sp(18)
                     text_size: self.width, None
                 CheckBox:
                     group: "a"
                     size_hint_x: .1
+                    on_active: root.parent.set_active(question, lbl3.text)
                 Label:
+                    id: lbl3
                     text: "A big truck."
                     font_size: sp(18)
                     text_size: self.width, None
