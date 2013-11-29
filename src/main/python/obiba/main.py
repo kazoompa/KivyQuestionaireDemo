@@ -6,8 +6,9 @@ from kivy.core.audio import SoundLoader
 from kivy.event import EventDispatcher
 from kivy.factory import Factory
 from kivy.lang import Builder, Parser
-from kivy.properties import ObjectProperty
+from kivy.properties import ObjectProperty, ListProperty
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
 from kivy.uix.popup import Popup
 from kivy.uix.videoplayer import VideoPlayer
 
@@ -24,6 +25,24 @@ class AppContainer(BoxLayout):
     def hex_to_percent(self, number):
         n = int(number, 16)
         return (n >> 16) / 255.0, ((n >> 8) & 255) / 255.0, (n & 255) / 255.0
+
+
+class WizardButton(Button):
+    active_color = None
+    active_background_color = None
+
+    def __init__(self, *args, **kwargs):
+        super(WizardButton, self).__init__(*args, **kwargs)
+        self.active_color = self.color
+        self.active_background_color = self.background_color
+
+    def hide(self):
+        self.color = 0, 0, 0, 0
+        self.background_color = 0, 0, 0, 0
+
+    def show(self):
+        self.color = self.active_color
+        self.color = self.active_background_color
 
 
 class Container(AppContainer):
@@ -66,7 +85,6 @@ class Question(Container):
             return
         self.dispatcher.dispatch_answer(question, answer)
         self.answered = True
-
 
 
 class AnswerDispatcher(EventDispatcher):
@@ -117,12 +135,12 @@ class Questionnaire(AppContainer):
         self.enable_button()
 
     def disable_button(self):
-        self.footer.start_button.disabled = True
+        self.footer.start_button.hide()
         self.footer.start_button.unbind(on_press=self.next_screen)
-        self.footer.remove_widget(self.footer.start_button)
+        #self.footer.remove_widget(self.footer.start_button)
 
     def enable_button(self):
-        self.footer.add_widget(self.footer.start_button)
+        self.footer.start_button.show()
         self.footer.start_button.text = "Next >"
         self.footer.start_button.disabled = False
         self.footer.start_button.bind(on_press=self.next_screen)
