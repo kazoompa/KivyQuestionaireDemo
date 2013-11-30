@@ -6,7 +6,7 @@ from kivy.core.audio import SoundLoader
 from kivy.event import EventDispatcher
 from kivy.factory import Factory
 from kivy.lang import Builder, Parser
-from kivy.properties import ObjectProperty, ListProperty
+from kivy.properties import ObjectProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.popup import Popup
@@ -28,21 +28,23 @@ class AppContainer(BoxLayout):
 
 
 class WizardButton(Button):
-    active_color = None
-    active_background_color = None
+    on_touch_down_handler = None
 
     def __init__(self, *args, **kwargs):
         super(WizardButton, self).__init__(*args, **kwargs)
-        self.active_color = self.color
-        self.active_background_color = self.background_color
+        self.on_touch_down_handler = self.on_touch_down
 
     def hide(self):
-        self.color = 0, 0, 0, 0
-        self.background_color = 0, 0, 0, 0
+        self.opacity = 0
 
     def show(self):
-        self.color = self.active_color
-        self.color = self.active_background_color
+        self.opacity = 1
+
+    def on_touch_down(self, touch):
+        if self.opacity == 1.0:
+            return super(WizardButton, self).on_touch_down(touch)
+        else:
+            return False
 
 
 class Container(AppContainer):
@@ -53,15 +55,15 @@ class Container(AppContainer):
         Builder._apply_rule(widget, parser.root, parser.root)
         self.add_widget(widget)
 
-    def play_sound(self, soundFile):
-        sound = SoundLoader.load(os.path.join(CONTAINER_MEDIA, soundFile))
+    def play_sound(self, sound_file):
+        sound = SoundLoader.load(os.path.join(CONTAINER_MEDIA, sound_file))
         if sound:
             sound.volume = .5
             sound.play()
 
-    def play_video(self, videoFile):
+    def play_video(self, video_file):
         popup = Popup(title='Test popup', size_hint=(None, None), size=(400, 400))
-        popup.add_widget(VideoPlayer(source=os.path.join(CONTAINER_MEDIA, videoFile), state='play'))
+        popup.add_widget(VideoPlayer(source=os.path.join(CONTAINER_MEDIA, video_file), state='play'))
         popup.open()
 
 
@@ -101,18 +103,34 @@ class AnswerDispatcher(EventDispatcher):
         pass
 
 
+class CloseAppDispatcher(EventDispatcher):
+    def __init__(self, **kwargs):
+        self.register_event_type('on_close')
+        super(CloseAppDispatcher, self).__init__(**kwargs)
+
+    def dispatch_close(self):
+        # when do_something is called, the 'on_test' event will be
+        # dispatched with the value
+        self.dispatch('on_close')
+
+    def on_close(self):
+        pass
+
 class Result(Container):
-    result_label = ObjectProperty()
+    qa = {}
 
     def __init__(self, **kwargs):
         super(Result, self).__init__(**kwargs)
         self.dispatcher.bind(on_answered=self.answer_handler)
 
     def answer_handler(self, dispatcher, question, answer):
-        self.children[0].result_label.text += question + "\n" + answer + "\n\n"
+        self.qa[question] = answer
 
-    def get_results(self):
-        return "\n\n".join(self.results)
+    def update_result(self, *args):
+        paragraph = "\n\n"
+        for question in sorted(self.qa.keys()):
+            paragraph += question + "\n" + self.qa[question] + "\n\n"
+        self.children[0].result_label.text = paragraph
 
 
 class Questionnaire(AppContainer):
@@ -121,6 +139,8 @@ class Questionnaire(AppContainer):
 
     def __init__(self, **kwargs):
         super(Questionnaire, self).__init__(**kwargs)
+        self.close_dispatcher = kwargs['close_dispatcher']
+
 
     def show(self):
         self.screens.current = "intro"
@@ -129,33 +149,38 @@ class Questionnaire(AppContainer):
 
     def next_screen(self, *args):
         self.screens.current = self.screens.next()
-        self.disable_button()
+        if self.screens.current_screen.name == 'conclusion':
+            self.footer.start_button.unbind(on_press=self.next_screen)
+            self.footer.start_button.bind(on_press=self.close)
+            self.footer.start_button.show()
+            self.footer.start_button.text = "Close X"
+        else:
+            self.footer.start_button.hide()
+            self.footer.start_button.text = "Next >"
+
+
+    def close(self, *args):
+        self.close_dispatcher.dispatch_close()
 
     def answer_handler(self, *args):
-        self.enable_button()
-
-    def disable_button(self):
-        self.footer.start_button.hide()
-        self.footer.start_button.unbind(on_press=self.next_screen)
-        #self.footer.remove_widget(self.footer.start_button)
-
-    def enable_button(self):
         self.footer.start_button.show()
-        self.footer.start_button.text = "Next >"
-        self.footer.start_button.disabled = False
-        self.footer.start_button.bind(on_press=self.next_screen)
 
 
 class QuestionnaireApp(App):
     def __init__(self, **kwargs):
         super(QuestionnaireApp, self).__init__(**kwargs)
         self.answer_dispatcher = AnswerDispatcher()
+        self.close_dispatcher = CloseAppDispatcher()
+        self.close_dispatcher.bind(on_close=self.close_app)
 
     def build(self):
         self._register_classes()
-        questionnaire = Questionnaire()
+        questionnaire = Questionnaire(close_dispatcher=self.close_dispatcher)
         self.answer_dispatcher.bind(on_answered=questionnaire.answer_handler)
         return questionnaire.show()
+
+    def close_app(self, *args):
+        exit()
 
     def _register_classes(self):
         qprog = re.compile("Question", re.IGNORECASE)

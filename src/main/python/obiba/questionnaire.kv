@@ -32,8 +32,11 @@
                 name: "q003"
                 Question003:
             Screen:
+                result: result
+                on_enter: result.update_result()
                 name: "conclusion"
                 Conclusion:
+                    id: result
 
         StackLayout:
             id: footer
@@ -50,7 +53,7 @@
                     pos: self.pos
                     size: self.width, self.height
             WizardButton:
-                background_color: root.hex_to_percent("29332e")
+                background_color: 1, 1, 1, 0
                 id: start_button
-                text: "Start"
+                text: "Start >"
                 size_hint: None, 1

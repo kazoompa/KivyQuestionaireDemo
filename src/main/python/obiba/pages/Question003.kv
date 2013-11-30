@@ -9,7 +9,7 @@ BoxLayout
             id: question
             markup: True
             font_size: sp(20)
-            text: "2) Have a look at this [ref=video][b][i]video[/i][/b][/ref] and choose one of the possible answers below?"
+            text: "3) Have a look at this [ref=video][b][i]video[/i][/b][/ref] and choose one of the possible answers below?"
             text_size: self.width, None
             size_hint_y: None
             on_ref_press: root.parent.play_video("holy_glou.avi")
@@ -30,7 +30,7 @@ BoxLayout
                     on_active: root.parent.set_active(question, lbl1.text)
                 Label:
                     id: lbl1
-                    text: 'Jesus wanna have some glou.'
+                    text: 'Jesus had a bud revelation.'
                     font_size: sp(18)
                     text_size: self.width, None
                 CheckBox:
